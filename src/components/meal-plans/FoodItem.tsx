@@ -5,6 +5,7 @@ import { useDrag } from 'react-dnd';
 import SubstitutionModal from './SubstitutionModal';
 
 interface FoodItemProps {
+  id: number;
   name: string;
   calories: number;
   protein: number;
@@ -12,10 +13,10 @@ interface FoodItemProps {
   fat: number;
 }
 
-const FoodItem: React.FC<FoodItemProps> = ({ name, calories, protein, carbs, fat }) => {
+const FoodItem: React.FC<FoodItemProps> = ({ id, name, calories, protein, carbs, fat }) => {
   const [{ isDragging }, drag] = useDrag(() => ({
     type: 'food',
-    item: { name, calories, protein, carbs, fat },
+    item: { id, name, calories, protein, carbs, fat },
     collect: (monitor) => ({
       isDragging: !!monitor.isDragging(),
     }),
