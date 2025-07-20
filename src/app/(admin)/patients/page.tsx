@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import React from "react";
+import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import PatientsTable from "@/components/patients/PatientsTable";
 
@@ -71,12 +72,15 @@ export default async function PatientsPage() {
             Gerencie seus pacientes e acompanhe seu progresso
           </p>
         </div>
-        <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium inline-flex items-center">
+        <Link
+          href="/patients/new"
+          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium inline-flex items-center"
+        >
           <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
           </svg>
           Novo Paciente
-        </button>
+        </Link>
       </div>
 
       <PatientsTable patients={patients} />

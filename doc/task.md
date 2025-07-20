@@ -1,230 +1,230 @@
 # Lista de Tarefas - Sistema de Gerenciamento de Nutricionistas
 
-## <¯ Objetivo
-Customizar o template TailAdmin Next.js para criar um sistema completo de gerenciamento de nutricionistas, incluindo gestão de pacientes, consultas, planos alimentares e relatórios.
+## Objetivo
+Customizar o template TailAdmin Next.js para criar um sistema completo de gerenciamento de nutricionistas, incluindo gestÃ£o de pacientes, consultas, planos alimentares e relatÃ³rios.
 
 ---
 
-## =Ë FASE 1: CONFIGURAÇÃO E ESTRUTURA BASE
+## FASE 1: CONFIGURAÃ‡ÃƒO E ESTRUTURA BASE
 
-### 1.1 Configuração Inicial
-- [ ] Configurar conexão com banco de dados MySQL
-- [ ] Instalar dependências adicionais (prisma, next-auth, etc.)
-- [ ] Configurar variáveis de ambiente (.env.local)
-- [ ] Testar funcionamento do template base
-- [ ] Configurar autenticação com roles (Admin, Nutricionista, Cliente)
+### 1.1 ConfiguraÃ§Ã£o Inicial
+- [x] Configurar conexÃ£o com banco de dados MySQL
+- [x] Instalar dependÃªncias adicionais (prisma, next-auth, etc.)
+- [x] Configurar variÃ¡veis de ambiente (.env.local)
+- [x] Testar funcionamento do template base
+- [x] Configurar autenticaÃ§Ã£o com roles (Admin, Nutricionista, Cliente)
 
 ### 1.2 Estrutura do Banco de Dados
-- [ ] Analisar schema existente (`banco_bodykal.sql`)
-- [ ] Criar tabelas adicionais necessárias:
-  - [ ] `nutritionists` (dados específicos de nutricionistas)
-  - [ ] `patients` (dados de pacientes)
-  - [ ] `appointments` (consultas/agendamentos)
-  - [ ] `meal_plans` (planos alimentares)
-  - [ ] `food_items` (alimentos)
-  - [ ] `nutritional_assessment` (avaliações nutricionais)
-- [ ] Criar relacionamentos entre tabelas
-- [ ] Configurar seeds/dados iniciais
+- [x] Analisar schema existente (`banco_bodykal.sql`)
+- [x] Criar tabelas adicionais necessÃ¡rias:
+  - [x] `nutritionists` (dados especÃ­ficos de nutricionistas)
+  - [x] `patients` (dados de pacientes)
+  - [x] `appointments` (consultas/agendamentos)
+  - [x] `meal_plans` (planos alimentares)
+  - [x] `food_items` (alimentos)
+  - [x] `nutritional_assessment` (avaliaÃ§Ãµes nutricionais)
+- [x] Criar relacionamentos entre tabelas
+- [x] Configurar seeds/dados iniciais
 
 ---
 
-## =ñ FASE 2: CUSTOMIZAÇÃO DA NAVEGAÇÃO E LAYOUT
+## FASE 2: CUSTOMIZAÃ‡ÃƒO DA NAVEGAÃ‡ÃƒO E LAYOUT
 
-### 2.1 Sidebar e Navegação
-- [ ] Customizar menu principal para nutricionistas:
-  - [ ] Dashboard
-  - [ ] Pacientes (Lista, Novo, Perfil)
-  - [ ] Consultas (Agenda, Nova Consulta, Histórico)
-  - [ ] Planos Alimentares (Lista, Novo Plano, Templates)
-  - [ ] Relatórios (Evolução, Estatísticas)
-  - [ ] Configurações
-- [ ] Implementar controle de acesso por role
-- [ ] Customizar ícones do menu
-- [ ] Ajustar breadcrumbs para novas páginas
+### 2.1 Sidebar e NavegaÃ§Ã£o
+- [x] Customizar menu principal para nutricionistas:
+  - [x] Dashboard
+  - [x] Pacientes (Lista, Novo, Perfil)
+  - [x] Consultas (Agenda, Nova Consulta, HistÃ³rico)
+  - [x] Planos Alimentares (Lista, Novo Plano, Templates)
+  - [x] RelatÃ³rios (EvoluÃ§Ã£o, EstatÃ­sticas)
+  - [x] ConfiguraÃ§Ãµes
+- [x] Implementar controle de acesso por role
+- [x] Customizar Ã­cones do menu
+- [x] Ajustar breadcrumbs para novas pÃ¡ginas
 
 ### 2.2 Header e Layout
-- [ ] Personalizar logo para BodyCal
-- [ ] Ajustar dropdown do usuário
-- [ ] Customizar notificações para contexto nutricional
-- [ ] Implementar busca global de pacientes
+- [x] Personalizar logo para BodyCal
+- [x] Ajustar dropdown do usuÃ¡rio
+- [x] Customizar notificaÃ§Ãµes para contexto nutricional
+- [x] Implementar busca global de pacientes
 
 ---
 
-## <à FASE 3: DASHBOARD PRINCIPAL
+## FASE 3: DASHBOARD PRINCIPAL
 
 ### 3.1 Dashboard do Nutricionista
-- [ ] Substituir métricas de e-commerce por métricas de pacientes:
-  - [ ] Total de pacientes ativos
-  - [ ] Consultas do dia/semana
-  - [ ] Metas de peso alcançadas
-  - [ ] Novos pacientes no mês
-- [ ] Criar gráfico de evolução geral dos pacientes
-- [ ] Implementar calendário de consultas na dashboard
-- [ ] Lista de próximas consultas
-- [ ] Alertas e lembretes importantes
-- [ ] Estatísticas de aderência aos planos
+- [x] Substituir mÃ©tricas de e-commerce por mÃ©tricas de pacientes:
+  - [x] Total de pacientes ativos
+  - [x] Consultas do dia/semana
+  - [x] Metas de peso alcanÃ§adas
+  - [x] Novos pacientes no mÃªs
+- [x] Criar grÃ¡fico de evoluÃ§Ã£o geral dos pacientes
+- [x] Implementar calendÃ¡rio de consultas na dashboard
+- [x] Lista de prÃ³ximas consultas
+- [x] Alertas e lembretes importantes
+- [x] EstatÃ­sticas de aderÃªncia aos planos
 
 ### 3.2 Dashboard do Admin
-- [ ] Métricas de sistema:
-  - [ ] Total de nutricionistas
-  - [ ] Total de pacientes
-  - [ ] Consultas realizadas
-  - [ ] Atividade dos nutricionistas
-- [ ] Gráficos de crescimento da plataforma
-- [ ] Relatórios de uso do sistema
+- [x] MÃ©tricas de sistema:
+  - [x] Total de nutricionistas
+  - [x] Total de pacientes
+  - [x] Consultas realizadas
+  - [x] Atividade dos nutricionistas
+- [x] GrÃ¡ficos de crescimento da plataforma
+- [x] RelatÃ³rios de uso do sistema
 
 ---
 
-## =e FASE 4: GESTÃO DE PACIENTES
+## FASE 4: GESTÃƒO DE PACIENTES
 
 ### 4.1 Lista de Pacientes
-- [ ] Criar página `/patients` com tabela de pacientes
-- [ ] Implementar filtros (status, data de cadastro, IMC, etc.)
-- [ ] Busca por nome, email, telefone
-- [ ] Paginação e ordenação
-- [ ] Ações rápidas (ver perfil, nova consulta, editar)
-- [ ] Indicadores visuais (status, últimas consultas)
+- [x] Criar pÃ¡gina `/patients` com tabela de pacientes
+- [x] Implementar filtros (status, data de cadastro, IMC, etc.)
+- [x] Busca por nome, email, telefone
+- [x] PaginaÃ§Ã£o e ordenaÃ§Ã£o
+- [x] AÃ§Ãµes rÃ¡pidas (ver perfil, nova consulta, editar)
+- [x] Indicadores visuais (status, Ãºltimas consultas)
 
 ### 4.2 Cadastro de Novo Paciente
-- [ ] Criar página `/patients/new`
-- [ ] Formulário de dados pessoais
-- [ ] Formulário de anamnese nutricional
-- [ ] Upload de foto do paciente
-- [ ] Histórico médico
-- [ ] Objetivos nutricionais
-- [ ] Validações e máscaras nos campos
+- [x] Criar pÃ¡gina `/patients/new`
+- [x] FormulÃ¡rio de dados pessoais
+- [x] FormulÃ¡rio de anamnese nutricional
+- [x] Upload de foto do paciente
+- [x] HistÃ³rico mÃ©dico
+- [x] Objetivos nutricionais
+- [x] ValidaÃ§Ãµes e mÃ¡scaras nos campos
 
 ### 4.3 Perfil do Paciente
-- [ ] Criar página `/patients/[id]`
-- [ ] Informações pessoais editáveis
-- [ ] Histórico de consultas
-- [ ] Evolução de peso/medidas (gráficos)
-- [ ] Planos alimentares ativos
-- [ ] Fotos de progresso
-- [ ] Notas do nutricionista
-- [ ] Linha do tempo de evolução
+- [x] Criar pÃ¡gina `/patients/[id]`
+- [x] InformaÃ§Ãµes pessoais editÃ¡veis
+- [x] HistÃ³rico de consultas
+- [x] EvoluÃ§Ã£o de peso/medidas (grÃ¡ficos)
+- [x] Planos alimentares ativos
+- [x] Fotos de progresso
+- [x] Notas do nutricionista
+- [x] Linha do tempo de evoluÃ§Ã£o
 
-### 4.4 Avaliação Antropométrica
-- [ ] Formulário de medidas corporais
-- [ ] Cálculos automáticos (IMC, % gordura, etc.)
-- [ ] Gráficos de evolução das medidas
-- [ ] Comparação com avaliações anteriores
-- [ ] Exportação de relatórios
+### 4.4 AvaliaÃ§Ã£o AntropomÃ©trica
+- [x] FormulÃ¡rio de medidas corporais
+- [x] CÃ¡lculos automÃ¡ticos (IMC, % gordura, etc.)
+- [x] GrÃ¡ficos de evoluÃ§Ã£o das medidas
+- [x] ComparaÃ§Ã£o com avaliaÃ§Ãµes anteriores
+- [x] ExportaÃ§Ã£o de relatÃ³rios
 
 ---
 
-## =Å FASE 5: SISTEMA DE CONSULTAS
+## FASE 5: SISTEMA DE CONSULTAS
 
-### 5.1 Calendário de Consultas
-- [ ] Integrar FullCalendar existente
-- [ ] Personalizar para consultas nutricionais
-- [ ] Diferentes tipos de consulta (primeira consulta, retorno, online)
-- [ ] Cores por status (agendada, realizada, cancelada)
-- [ ] Arrastar e soltar para reagendar
-- [ ] Visualização por dia/semana/mês
+### 5.1 CalendÃ¡rio de Consultas
+- [x] Integrar FullCalendar existente
+- [x] Personalizar para consultas nutricionais
+- [x] Diferentes tipos de consulta (primeira consulta, retorno, online)
+- [x] Cores por status (agendada, realizada, cancelada)
+- [x] Arrastar e soltar para reagendar
+- [x] VisualizaÃ§Ã£o por dia/semana/mÃªs
 
 ### 5.2 Agendamento de Consultas
-- [ ] Formulário de novo agendamento
-- [ ] Seleção de paciente
-- [ ] Escolha de horário disponível
-- [ ] Tipo de consulta
-- [ ] Observações
-- [ ] Notificações automáticas
+- [x] FormulÃ¡rio de novo agendamento
+- [x] SeleÃ§Ã£o de paciente
+- [x] Escolha de horÃ¡rio disponÃ­vel
+- [x] Tipo de consulta
+- [x] ObservaÃ§Ãµes
+- [x] NotificaÃ§Ãµes automÃ¡ticas
 
 ### 5.3 Consulta em Andamento
-- [ ] Interface de consulta ativa
-- [ ] Formulário de evolução
-- [ ] Registro de peso/medidas
-- [ ] Anotações da consulta
-- [ ] Prescrição de plano alimentar
-- [ ] Orientações nutricionais
-- [ ] Agendamento da próxima consulta
+- [x] Interface de consulta ativa
+- [x] FormulÃ¡rio de evoluÃ§Ã£o
+- [x] Registro de peso/medidas
+- [x] AnotaÃ§Ãµes da consulta
+- [x] PrescriÃ§Ã£o de plano alimentar
+- [x] OrientaÃ§Ãµes nutricionais
+- [x] Agendamento da prÃ³xima consulta
 
-### 5.4 Histórico de Consultas
-- [ ] Lista de todas as consultas por paciente
-- [ ] Filtros por período, tipo, status
-- [ ] Visualização detalhada de cada consulta
-- [ ] Exportação de relatórios
+### 5.4 HistÃ³rico de Consultas
+- [x] Lista de todas as consultas por paciente
+- [x] Filtros por perÃ­odo, tipo, status
+- [x] VisualizaÃ§Ã£o detalhada de cada consulta
+- [x] ExportaÃ§Ã£o de relatÃ³rios
 
 ---
 
-## <} FASE 6: PLANOS ALIMENTARES
+## FASE 6: PLANOS ALIMENTARES
 
 ### 6.1 Lista de Planos
-- [ ] Página `/meal-plans` com todos os planos
+- [x] PÃ¡gina `/meal-plans` com todos os planos
 - [ ] Filtros por paciente, status, data
 - [ ] Templates de planos
-- [ ] Duplicação de planos existentes
+- [ ] DuplicaÃ§Ã£o de planos existentes
 
 ### 6.2 Criador de Planos Alimentares
-- [ ] Interface drag-and-drop para montar planos
-- [ ] Banco de alimentos com informações nutricionais
-- [ ] Cálculo automático de macros e calorias
-- [ ] Substituições de alimentos
-- [ ] Divisão por refeições (café, almoço, lanche, jantar)
-- [ ] Orientações especiais
-- [ ] Preview para impressão
+- [x] Interface drag-and-drop para montar planos
+- [ ] Banco de alimentos com informaÃ§Ãµes nutricionais
+- [ ] CÃ¡lculo automÃ¡tico de macros e calorias
+- [ ] SubstituiÃ§Ãµes de alimentos
+- [ ] DivisÃ£o por refeiÃ§Ãµes (cafÃ©, almoÃ§o, lanche, jantar)
+- [ ] OrientaÃ§Ãµes especiais
+- [ ] Preview para impressÃ£o
 
 ### 6.3 Banco de Alimentos
-- [ ] Cadastro de alimentos
-- [ ] Informações nutricionais completas
-- [ ] Categorização de alimentos
+- [x] Cadastro de alimentos
+- [ ] InformaÃ§Ãµes nutricionais completas
+- [ ] CategorizaÃ§Ã£o de alimentos
 - [ ] Busca e filtros
-- [ ] Importação de dados TACO/USDA
+- [ ] ImportaÃ§Ã£o de dados TACO/USDA
 
 ### 6.4 Templates de Planos
-- [ ] Criação de templates reutilizáveis
-- [ ] Categorização por objetivo (emagrecimento, ganho de massa, etc.)
+- [x] CriaÃ§Ã£o de templates reutilizÃ¡veis
+- [ ] CategorizaÃ§Ã£o por objetivo (emagrecimento, ganho de massa, etc.)
 - [ ] Compartilhamento entre nutricionistas
-- [ ] Personalização de templates
+- [ ] PersonalizaÃ§Ã£o de templates
 
 ---
 
-## =Ê FASE 7: RELATÓRIOS E ANÁLISES
+## FASE 7: RELATÃ“RIOS E ANÃLISES
 
-### 7.1 Relatórios de Paciente
-- [ ] Relatório de evolução individual
-- [ ] Gráficos de peso/medidas ao longo do tempo
-- [ ] Aderência ao plano alimentar
-- [ ] Análise de resultados
-- [ ] Exportação em PDF
+### 7.1 RelatÃ³rios de Paciente
+- [ ] RelatÃ³rio de evoluÃ§Ã£o individual
+- [ ] GrÃ¡ficos de peso/medidas ao longo do tempo
+- [ ] AderÃªncia ao plano alimentar
+- [ ] AnÃ¡lise de resultados
+- [ ] ExportaÃ§Ã£o em PDF
 
-### 7.2 Relatórios Gerais
-- [ ] Estatísticas do consultório
+### 7.2 RelatÃ³rios Gerais
+- [ ] EstatÃ­sticas do consultÃ³rio
 - [ ] Performance dos planos alimentares
-- [ ] Análise de resultados por período
-- [ ] Relatórios financeiros (se aplicável)
+- [ ] AnÃ¡lise de resultados por perÃ­odo
+- [ ] RelatÃ³rios financeiros (se aplicÃ¡vel)
 
-### 7.3 Dashboards Analíticos
-- [ ] Gráficos interativos com ApexCharts
-- [ ] Métricas de sucesso
-- [ ] Comparações e benchmarks
-- [ ] Exportação de dados
+### 7.3 Dashboards AnalÃ­ticos
+- [ ] GrÃ¡ficos interativos com ApexCharts
+- [ ] MÃ©tricas de sucesso
+- [ ] ComparaÃ§Ãµes e benchmarks
+- [ ] ExportaÃ§Ã£o de dados
 
 ---
 
-## =' FASE 8: FUNCIONALIDADES AVANÇADAS
+## FASE 8: FUNCIONALIDADES AVANÃ‡ADAS
 
-### 8.1 Sistema de Notificações
+### 8.1 Sistema de NotificaÃ§Ãµes
 - [ ] Lembretes de consultas
-- [ ] Notificações de evolução
-- [ ] Alertas de metas não atingidas
+- [ ] NotificaÃ§Ãµes de evoluÃ§Ã£o
+- [ ] Alertas de metas nÃ£o atingidas
 - [ ] Sistema de mensagens interno
 
 ### 8.2 Recursos Mobile
-- [ ] Otimização para dispositivos móveis
+- [ ] OtimizaÃ§Ã£o para dispositivos mÃ³veis
 - [ ] Progressive Web App (PWA)
-- [ ] Funcionamento offline básico
+- [ ] Funcionamento offline bÃ¡sico
 
-### 8.3 Integrações
-- [ ] Integração com balanças inteligentes
-- [ ] APIs de nutrição
-- [ ] Sistema de pagamentos (se necessário)
-- [ ] Backup automático
+### 8.3 IntegraÃ§Ãµes
+- [ ] IntegraÃ§Ã£o com balanÃ§as inteligentes
+- [ ] APIs de nutriÃ§Ã£o
+- [ ] Sistema de pagamentos (se necessÃ¡rio)
+- [ ] Backup automÃ¡tico
 
 ---
 
-## <¨ FASE 9: PERSONALIZAÇÃO VISUAL
+## FASE 9: PERSONALIZAÃ‡ÃƒO VISUAL
 
 ### 9.1 Branding
 - [ ] Personalizar cores do tema para BodyCal
@@ -232,86 +232,86 @@ Customizar o template TailAdmin Next.js para criar um sistema completo de gerenc
 - [ ] Customizar favicon
 - [ ] Ajustar tipografia
 
-### 9.2 UX/UI Específico
-- [ ] Ícones relacionados à nutrição
-- [ ] Imagens e ilustrações temáticas
-- [ ] Animações e microinterações
+### 9.2 UX/UI EspecÃ­fico
+- [ ] Ãcones relacionados Ã  nutriÃ§Ã£o
+- [ ] Imagens e ilustraÃ§Ãµes temÃ¡ticas
+- [ ] AnimaÃ§Ãµes e microinteraÃ§Ãµes
 - [ ] Acessibilidade e usabilidade
 
 ---
 
-## >ê FASE 10: TESTES E QUALIDADE
+## FASE 10: TESTES E QUALIDADE
 
 ### 10.1 Testes Funcionais
 - [ ] Testes de unidade para componentes
-- [ ] Testes de integração
+- [ ] Testes de integraÃ§Ã£o
 - [ ] Testes end-to-end com Cypress/Playwright
 - [ ] Testes de performance
 
-### 10.2 Validações e Segurança
-- [ ] Validação de formulários
-- [ ] Sanitização de dados
-- [ ] Proteção contra CSRF/XSS
-- [ ] Criptografia de dados sensíveis
-- [ ] Backup e recuperação
+### 10.2 ValidaÃ§Ãµes e SeguranÃ§a
+- [ ] ValidaÃ§Ã£o de formulÃ¡rios
+- [ ] SanitizaÃ§Ã£o de dados
+- [ ] ProteÃ§Ã£o contra CSRF/XSS
+- [ ] Criptografia de dados sensÃ­veis
+- [ ] Backup e recuperaÃ§Ã£o
 
 ---
 
-## =€ FASE 11: DEPLOY E PRODUÇÃO
+## FASE 11: DEPLOY E PRODUÃ‡ÃƒO
 
-### 11.1 Preparação para Deploy
-- [ ] Otimização de build
-- [ ] Configuração de ambiente de produção
-- [ ] Setup de banco de dados produção
-- [ ] Configuração de CDN para imagens
+### 11.1 PreparaÃ§Ã£o para Deploy
+- [ ] OtimizaÃ§Ã£o de build
+- [ ] ConfiguraÃ§Ã£o de ambiente de produÃ§Ã£o
+- [ ] Setup de banco de dados produÃ§Ã£o
+- [ ] ConfiguraÃ§Ã£o de CDN para imagens
 - [ ] Monitoramento e logs
 
-### 11.2 Documentação
-- [ ] Manual do usuário
-- [ ] Documentação técnica
-- [ ] Guia de instalação
-- [ ] Documentação da API
+### 11.2 DocumentaÃ§Ã£o
+- [ ] Manual do usuÃ¡rio
+- [ ] DocumentaÃ§Ã£o tÃ©cnica
+- [ ] Guia de instalaÃ§Ã£o
+- [ ] DocumentaÃ§Ã£o da API
 
 ---
 
-## =È FASE 12: MELHORIAS FUTURAS
+## FASE 12: MELHORIAS FUTURAS
 
-### 12.1 Funcionalidades Avançadas
-- [ ] IA para sugestões de planos
-- [ ] Análise preditiva de resultados
+### 12.1 Funcionalidades AvanÃ§adas
+- [ ] IA para sugestÃµes de planos
+- [ ] AnÃ¡lise preditiva de resultados
 - [ ] Chatbot para pacientes
-- [ ] Integração com wearables
+- [ ] IntegraÃ§Ã£o com wearables
 
-### 12.2 Expansão
-- [ ] Multi-tenancy para múltiplos consultórios
-- [ ] API pública para integrações
+### 12.2 ExpansÃ£o
+- [ ] Multi-tenancy para mÃºltiplos consultÃ³rios
+- [ ] API pÃºblica para integraÃ§Ãµes
 - [ ] Marketplace de planos alimentares
 - [ ] Sistema de teleconsulta integrado
 
 ---
 
-## <¯ PRIORIZAÇÃO
+## PRIORIZAÃ‡ÃƒO
 
-### =4 Alta Prioridade (MVP)
-- Fases 1-5: Configuração, estrutura, pacientes e consultas básicas
+### Alta Prioridade (MVP)
+- Fases 1-5: ConfiguraÃ§Ã£o, estrutura, pacientes e consultas bÃ¡sicas
 
-### =á Média Prioridade
-- Fases 6-8: Planos alimentares e relatórios
+### MÃ©dia Prioridade
+- Fases 6-8: Planos alimentares e relatÃ³rios
 
-### =â Baixa Prioridade
-- Fases 9-12: Personalização, testes avançados e melhorias futuras
+### Baixa Prioridade
+- Fases 9-12: PersonalizaÃ§Ã£o, testes avanÃ§ados e melhorias futuras
 
 ---
 
-## =İ Notas Importantes
+## Notas Importantes
 
-1. **Cada fase deve ser testada antes de prosseguir para a próxima**
+1. **Cada fase deve ser testada antes de prosseguir para a prÃ³xima**
 2. **Manter backups regulares durante o desenvolvimento**
-3. **Documentar mudanças significativas no código**
-4. **Considerar feedback dos usuários durante o desenvolvimento**
-5. **Priorizar performance e usabilidade em dispositivos móveis**
+3. **Documentar mudanÃ§as significativas no cÃ³digo**
+4. **Considerar feedback dos usuÃ¡rios durante o desenvolvimento**
+5. **Priorizar performance e usabilidade em dispositivos mÃ³veis**
 
 ---
 
-*Última atualização: $(date)*
+*Ãšltima atualizaÃ§Ã£o: $(date)*
 *Status: Em planejamento*

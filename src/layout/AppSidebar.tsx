@@ -1,4 +1,4 @@
-"use client";
+'use client';
 import React, { useEffect, useRef, useState,useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
@@ -55,6 +55,7 @@ const navItems: NavItem[] = [
       { name: "Meus Planos", path: "/meal-plans", pro: false },
       { name: "Criar Plano", path: "/meal-plans/new", pro: false },
       { name: "Banco de Alimentos", path: "/foods", pro: false },
+      { name: "Modelos de Planos", path: "/meal-plan-templates", pro: false },
     ],
   },
   {
