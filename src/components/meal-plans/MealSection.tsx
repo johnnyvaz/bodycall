@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useRef } from 'react';
 import { useDrop } from 'react-dnd';
 
 interface MealSectionProps {
@@ -22,8 +22,11 @@ const MealSection: React.FC<MealSectionProps> = ({ title, onDrop, children, tota
     }),
   }));
 
+  const ref = useRef<HTMLDivElement>(null);
+  drop(ref);
+
   return (
-    <div ref={drop} className={`rounded-lg border border-stroke bg-white dark:border-strokedark dark:bg-boxdark p-5 ${
+    <div ref={ref} className={`rounded-lg border border-stroke bg-white dark:border-strokedark dark:bg-boxdark p-5 ${
       isOver ? 'bg-primary/20' : ''
     }`}>
       <div className="flex justify-between items-center mb-4">
