@@ -11,10 +11,8 @@ import {
   GridIcon,
   HorizontaLDots,
   ListIcon,
-  PageIcon,
   PieChartIcon,
   PlugInIcon,
-  TableIcon,
   UserCircleIcon,
 } from "../icons/index";
 import SidebarWidget from "./SidebarWidget";
@@ -30,66 +28,68 @@ const navItems: NavItem[] = [
   {
     icon: <GridIcon />,
     name: "Dashboard",
-    subItems: [{ name: "Ecommerce", path: "/", pro: false }],
-  },
-  {
-    icon: <CalenderIcon />,
-    name: "Calendar",
-    path: "/calendar",
+    path: "/",
   },
   {
     icon: <UserCircleIcon />,
-    name: "User Profile",
-    path: "/profile",
-  },
-
-  {
-    name: "Forms",
-    icon: <ListIcon />,
-    subItems: [{ name: "Form Elements", path: "/form-elements", pro: false }],
-  },
-  {
-    name: "Tables",
-    icon: <TableIcon />,
-    subItems: [{ name: "Basic Tables", path: "/basic-tables", pro: false }],
-  },
-  {
-    name: "Pages",
-    icon: <PageIcon />,
+    name: "Pacientes",
     subItems: [
-      { name: "Blank Page", path: "/blank", pro: false },
-      { name: "404 Error", path: "/error-404", pro: false },
+      { name: "Lista de Pacientes", path: "/patients", pro: false },
+      { name: "Novo Paciente", path: "/patients/new", pro: false },
+      { name: "Histórico IMC", path: "/patients/imc-history", pro: false },
+    ],
+  },
+  {
+    icon: <CalenderIcon />,
+    name: "Consultas",
+    subItems: [
+      { name: "Agenda", path: "/appointments", pro: false },
+      { name: "Nova Consulta", path: "/appointments/new", pro: false },
+      { name: "Histórico", path: "/appointments/history", pro: false },
+    ],
+  },
+  {
+    icon: <ListIcon />,
+    name: "Planos Alimentares",
+    subItems: [
+      { name: "Meus Planos", path: "/meal-plans", pro: false },
+      { name: "Criar Plano", path: "/meal-plans/new", pro: false },
+      { name: "Banco de Alimentos", path: "/foods", pro: false },
+    ],
+  },
+  {
+    icon: <PieChartIcon />,
+    name: "Relatórios",
+    subItems: [
+      { name: "Evolução Pacientes", path: "/reports/evolution", pro: false },
+      { name: "Estatísticas", path: "/reports/stats", pro: false },
+      { name: "Exportar Dados", path: "/reports/export", pro: false },
     ],
   },
 ];
 
 const othersItems: NavItem[] = [
   {
-    icon: <PieChartIcon />,
-    name: "Charts",
+    icon: <UserCircleIcon />,
+    name: "Meu Perfil",
+    path: "/profile",
+  },
+  {
+    icon: <PlugInIcon />,
+    name: "Configurações",
     subItems: [
-      { name: "Line Chart", path: "/line-chart", pro: false },
-      { name: "Bar Chart", path: "/bar-chart", pro: false },
+      { name: "Dados Pessoais", path: "/settings/profile", pro: false },
+      { name: "Notificações", path: "/settings/notifications", pro: false },
+      { name: "Preferências", path: "/settings/preferences", pro: false },
     ],
   },
   {
     icon: <BoxCubeIcon />,
-    name: "UI Elements",
+    name: "Ajuda",
     subItems: [
-      { name: "Alerts", path: "/alerts", pro: false },
-      { name: "Avatar", path: "/avatars", pro: false },
-      { name: "Badge", path: "/badge", pro: false },
-      { name: "Buttons", path: "/buttons", pro: false },
-      { name: "Images", path: "/images", pro: false },
-      { name: "Videos", path: "/videos", pro: false },
-    ],
-  },
-  {
-    icon: <PlugInIcon />,
-    name: "Authentication",
-    subItems: [
-      { name: "Sign In", path: "/signin", pro: false },
-      { name: "Sign Up", path: "/signup", pro: false },
+      { name: "Tutorial", path: "/help/tutorial", pro: false },
+      { name: "Suporte", path: "/help/support", pro: false },
+      { name: "Sobre", path: "/help/about", pro: false },
     ],
   },
 ];
@@ -348,7 +348,7 @@ const AppSidebar: React.FC = () => {
                 }`}
               >
                 {isExpanded || isHovered || isMobileOpen ? (
-                  "Menu"
+                  "Navegação"
                 ) : (
                   <HorizontaLDots />
                 )}
@@ -365,7 +365,7 @@ const AppSidebar: React.FC = () => {
                 }`}
               >
                 {isExpanded || isHovered || isMobileOpen ? (
-                  "Others"
+                  "Configurações"
                 ) : (
                   <HorizontaLDots />
                 )}

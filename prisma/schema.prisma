@@ -1,0 +1,507 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model SystemUser {
+  id                       Int                        @id
+  createdate               DateTime?                  @db.Date
+  name                     String?                    @db.VarChar(256)
+  login                    String?                    @db.VarChar(256)
+  password                 String?                    @db.VarChar(256)
+  email                    String?                    @db.VarChar(256)
+  acceptedTermPolicy       String?                    @map("accepted_term_policy") @db.Char(1)
+  phone                    String?                    @db.VarChar(256)
+  address                  String?                    @db.VarChar(256)
+  cep                      String?                    @db.VarChar(10)
+  functionName             String?                    @map("function_name") @db.VarChar(256)
+  about                    String?                    @db.VarChar(4096)
+  acceptedTermPolicyAt     String?                    @map("accepted_term_policy_at") @db.VarChar(256)
+  acceptedTermPolicyData   String?                    @map("accepted_term_policy_data") @db.Text
+  frontpageId              Int?                       @map("frontpage_id")
+  systemUnitId             Int?                       @map("system_unit_id")
+  active                   String?                    @db.Char(1)
+  customCode               String?                    @map("custom_code") @db.VarChar(256)
+  otpSecret                String?                    @map("otp_secret") @db.VarChar(256)
+  photo                    String?                    @db.VarChar(250)
+  crn                      String?                    @db.VarChar(20)
+  specialization           String?                    @db.VarChar(500)
+  patientLimit             Int?                       @map("patient_limit")
+  nutritionistAppointments Appointment[]              @relation("NutritionistAppointments")
+  patientAppointments      Appointment[]              @relation("PatientAppointments")
+  mealPlans                MealPlan[]
+  nutritionistPatients     NutritionistPatient[]      @relation("Nutritionist")
+  patientNutritionists     NutritionistPatient[]      @relation("Patient")
+  userGroups               SystemUserGroup[]
+  system_user_old_password system_user_old_password[]
+  userPrograms             SystemUserProgram[]
+  userRoles                SystemUserRole[]
+  userUnits                SystemUserUnit[]
+  system_program           SystemProgram?             @relation(fields: [frontpageId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "system_users_ibfk_1")
+
+  @@index([frontpageId], map: "sys_user_program_idx")
+  @@index([name], map: "sys_users_name_idx")
+  @@map("system_users")
+}
+
+model ImcCollection {
+  id       Int      @id @default(autoincrement())
+  dateimc  DateTime @db.Date
+  userid   Int
+  sex      String?  @db.VarChar(20)
+  age      Int?
+  weight   Float?
+  height   Int?
+  neck     Int?
+  waist    Int?
+  belly    Int?
+  lowwaist Int?
+  hip      Int?
+  pgc      Float?
+  category String?  @db.VarChar(100)
+  gci      String?  @db.VarChar(100)
+  mgfm     Float?
+  mmlm     Float?
+  pgbmi    Float?
+  ica      Float?
+
+  @@map("imccollection")
+}
+
+model SystemGroup {
+  id            Int                  @id
+  name          String?              @db.VarChar(256)
+  groupPrograms SystemGroupProgram[]
+  userGroups    SystemUserGroup[]
+
+  @@index([name], map: "sys_group_name_idx")
+  @@map("system_group")
+}
+
+model SystemUserGroup {
+  id            Int          @id
+  systemUserId  Int?         @map("system_user_id")
+  systemGroupId Int?         @map("system_group_id")
+  user          SystemUser?  @relation(fields: [systemUserId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "system_user_group_ibfk_1")
+  group         SystemGroup? @relation(fields: [systemGroupId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "system_user_group_ibfk_2")
+
+  @@index([systemGroupId], map: "sys_user_group_group_idx")
+  @@index([systemUserId], map: "sys_user_group_user_idx")
+  @@map("system_user_group")
+}
+
+model SystemProgram {
+  id                         Int                          @id
+  name                       String?                      @db.VarChar(256)
+  controller                 String?                      @db.VarChar(256)
+  groupPrograms              SystemGroupProgram[]
+  system_program_method_role system_program_method_role[]
+  userPrograms               SystemUserProgram[]
+  system_users               SystemUser[]
+
+  @@index([controller], map: "sys_program_controller_idx")
+  @@index([name], map: "sys_program_name_idx")
+  @@map("system_program")
+}
+
+model SystemUserProgram {
+  id              Int            @id
+  systemUserId    Int?           @map("system_user_id")
+  systemProgramId Int?           @map("system_program_id")
+  user            SystemUser?    @relation(fields: [systemUserId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "system_user_program_ibfk_1")
+  program         SystemProgram? @relation(fields: [systemProgramId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "system_user_program_ibfk_2")
+
+  @@index([systemProgramId], map: "sys_user_program_program_idx")
+  @@index([systemUserId], map: "sys_user_program_user_idx")
+  @@map("system_user_program")
+}
+
+model SystemGroupProgram {
+  id              Int            @id
+  systemGroupId   Int?           @map("system_group_id")
+  systemProgramId Int?           @map("system_program_id")
+  group           SystemGroup?   @relation(fields: [systemGroupId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "system_group_program_ibfk_1")
+  program         SystemProgram? @relation(fields: [systemProgramId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "system_group_program_ibfk_2")
+
+  @@index([systemGroupId], map: "sys_group_program_group_idx")
+  @@index([systemProgramId], map: "sys_group_program_program_idx")
+  @@map("system_group_program")
+}
+
+model SystemRole {
+  id                         Int                          @id
+  name                       String?                      @db.VarChar(256)
+  custom_code                String?                      @db.VarChar(256)
+  system_program_method_role system_program_method_role[]
+  userRoles                  SystemUserRole[]
+
+  @@index([name], map: "sys_role_name_idx")
+  @@map("system_role")
+}
+
+model SystemUserRole {
+  id           Int         @id
+  systemUserId Int?        @map("system_user_id")
+  systemRoleId Int?        @map("system_role_id")
+  user         SystemUser? @relation(fields: [systemUserId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "system_user_role_ibfk_1")
+  role         SystemRole? @relation(fields: [systemRoleId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "system_user_role_ibfk_2")
+
+  @@index([systemRoleId], map: "sys_user_role_role_idx")
+  @@index([systemUserId], map: "sys_user_role_user_idx")
+  @@map("system_user_role")
+}
+
+model SystemUnit {
+  id              Int              @id
+  name            String?          @db.VarChar(256)
+  connection_name String?          @db.VarChar(256)
+  custom_code     String?          @db.VarChar(256)
+  userUnits       SystemUserUnit[]
+
+  @@index([name], map: "sys_unit_name_idx")
+  @@map("system_unit")
+}
+
+model SystemUserUnit {
+  id           Int         @id
+  systemUserId Int?        @map("system_user_id")
+  systemUnitId Int?        @map("system_unit_id")
+  user         SystemUser? @relation(fields: [systemUserId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "system_user_unit_ibfk_1")
+  unit         SystemUnit? @relation(fields: [systemUnitId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "system_user_unit_ibfk_2")
+
+  @@index([systemUnitId], map: "sys_user_unit_unit_idx")
+  @@index([systemUserId], map: "sys_user_unit_user_idx")
+  @@map("system_user_unit")
+}
+
+model SystemMessage {
+  id             Int     @id
+  systemUserId   Int?    @map("system_user_id")
+  systemUserToId Int?    @map("system_user_to_id")
+  subject        String? @db.VarChar(256)
+  message        String? @db.Text
+  dt_message     String? @db.VarChar(256)
+  checked        String? @db.Char(1)
+
+  @@index([systemUserId], map: "sys_message_user_id_idx")
+  @@index([systemUserToId], map: "sys_message_user_to_idx")
+  @@map("system_message")
+}
+
+model SystemNotification {
+  id             Int     @id
+  systemUserId   Int?    @map("system_user_id")
+  systemUserToId Int?    @map("system_user_to_id")
+  subject        String? @db.VarChar(256)
+  message        String? @db.Text
+  dt_message     String? @db.VarChar(256)
+  action_url     String? @db.VarChar(4096)
+  action_label   String? @db.VarChar(256)
+  icon           String? @db.VarChar(256)
+  checked        String? @db.Char(1)
+
+  @@index([systemUserId], map: "sys_notification_user_id_idx")
+  @@index([systemUserToId], map: "sys_notification_user_to_idx")
+  @@map("system_notification")
+}
+
+model SystemPost {
+  id           Int      @id
+  systemUserId Int?     @map("system_user_id")
+  title        String   @db.VarChar(256)
+  content      String   @db.Text
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamp(0)
+  active       String   @default("Y") @db.Char(1)
+
+  @@index([systemUserId], map: "sys_post_user_idx")
+  @@map("system_post")
+}
+
+model SystemPostComment {
+  id           Int      @id
+  comment      String   @db.Text
+  systemUserId Int      @map("system_user_id")
+  systemPostId Int      @map("system_post_id")
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamp(0)
+
+  @@index([systemPostId], map: "sys_post_comment_post_idx")
+  @@index([systemUserId], map: "sys_post_comment_user_idx")
+  @@map("system_post_comment")
+}
+
+model NutritionistPatient {
+  id             Int        @id @default(autoincrement())
+  nutritionistId Int        @map("nutritionist_id")
+  patientId      Int        @map("patient_id")
+  createdAt      DateTime?  @default(now()) @map("created_at") @db.Timestamp(0)
+  active         String?    @default("Y") @db.Char(1)
+  nutritionist   SystemUser @relation("Nutritionist", fields: [nutritionistId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "nutritionist_patient_ibfk_1")
+  patient        SystemUser @relation("Patient", fields: [patientId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "nutritionist_patient_ibfk_2")
+
+  @@unique([nutritionistId, patientId], map: "unique_relationship")
+  @@index([patientId], map: "patient_id")
+  @@map("nutritionist_patient")
+}
+
+model MealPlan {
+  id          Int        @id @default(autoincrement())
+  patientId   Int        @map("patient_id")
+  name        String     @db.VarChar(255)
+  description String?    @db.Text
+  startDate   DateTime   @map("start_date") @db.Date
+  endDate     DateTime?  @map("end_date") @db.Date
+  active      String?    @default("Y") @db.Char(1)
+  createdAt   DateTime?  @default(now()) @map("created_at") @db.Timestamp(0)
+  updatedAt   DateTime?  @default(now()) @updatedAt @map("updated_at") @db.Timestamp(0)
+  patient     SystemUser @relation(fields: [patientId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "meal_plans_ibfk_1")
+  meals       Meal[]
+
+  @@index([patientId], map: "patient_id")
+  @@map("meal_plans")
+}
+
+model Meal {
+  id          Int        @id @default(autoincrement())
+  mealPlanId  Int        @map("meal_plan_id")
+  name        String     @db.VarChar(100)
+  time        String?    @db.VarChar(10)
+  description String?    @db.Text
+  calories    Float?
+  foods       MealFood[]
+  mealPlan    MealPlan   @relation(fields: [mealPlanId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "meals_ibfk_1")
+
+  @@index([mealPlanId], map: "meal_plan_id")
+  @@map("meals")
+}
+
+model Food {
+  id              Int        @id @default(autoincrement())
+  name            String     @db.VarChar(255)
+  category        String?    @db.VarChar(100)
+  caloriesPer100g Float?     @map("calories_per_100g")
+  proteinPer100g  Float?     @map("protein_per_100g")
+  carbsPer100g    Float?     @map("carbs_per_100g")
+  fatPer100g      Float?     @map("fat_per_100g")
+  fiberPer100g    Float?     @map("fiber_per_100g")
+  active          String?    @default("Y") @db.Char(1)
+  mealFoods       MealFood[]
+
+  @@map("foods")
+}
+
+model MealFood {
+  id       Int   @id @default(autoincrement())
+  mealId   Int   @map("meal_id")
+  foodId   Int   @map("food_id")
+  quantity Float
+  meal     Meal  @relation(fields: [mealId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "meal_foods_ibfk_1")
+  food     Food  @relation(fields: [foodId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "meal_foods_ibfk_2")
+
+  @@index([foodId], map: "food_id")
+  @@index([mealId], map: "meal_id")
+  @@map("meal_foods")
+}
+
+model Appointment {
+  id             Int        @id @default(autoincrement())
+  nutritionistId Int        @map("nutritionist_id")
+  patientId      Int        @map("patient_id")
+  date           DateTime   @db.DateTime(0)
+  duration       Int?       @default(60)
+  type           String?    @default("consulta") @db.VarChar(50)
+  status         String?    @default("agendada") @db.VarChar(30)
+  notes          String?    @db.Text
+  createdAt      DateTime?  @default(now()) @map("created_at") @db.Timestamp(0)
+  updatedAt      DateTime?  @default(now()) @updatedAt @map("updated_at") @db.Timestamp(0)
+  nutritionist   SystemUser @relation("NutritionistAppointments", fields: [nutritionistId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "appointments_ibfk_1")
+  patient        SystemUser @relation("PatientAppointments", fields: [patientId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "appointments_ibfk_2")
+
+  @@index([nutritionistId], map: "nutritionist_id")
+  @@index([patientId], map: "patient_id")
+  @@map("appointments")
+}
+
+model system_document {
+  id               Int       @id
+  system_user_id   Int?
+  title            String?   @db.VarChar(256)
+  description      String?   @db.VarChar(4096)
+  category_id      Int?
+  submission_date  DateTime? @db.Date
+  archive_date     DateTime? @db.Date
+  filename         String?   @db.VarChar(512)
+  in_trash         String?   @db.Char(1)
+  system_folder_id Int?
+
+  @@index([category_id], map: "sys_document_category_idx")
+  @@index([system_folder_id], map: "sys_document_folder_idx")
+  @@index([system_user_id], map: "sys_document_user_idx")
+}
+
+model system_document_bookmark {
+  id                 Int  @id
+  system_user_id     Int?
+  system_document_id Int?
+
+  @@index([system_document_id], map: "sys_document_bookmark_document_idx")
+  @@index([system_user_id], map: "sys_document_bookmark_user_idx")
+}
+
+model system_document_category {
+  id   Int     @id
+  name String? @db.VarChar(256)
+
+  @@index([name], map: "sys_document_category_name_idx")
+}
+
+model system_document_group {
+  id              Int  @id
+  document_id     Int?
+  system_group_id Int?
+
+  @@index([document_id], map: "sys_document_group_document_idx")
+  @@index([system_group_id], map: "sys_document_group_group_idx")
+}
+
+model system_document_user {
+  id             Int  @id
+  document_id    Int?
+  system_user_id Int?
+
+  @@index([document_id], map: "sys_document_user_document_idx")
+  @@index([system_user_id], map: "sys_document_user_user_idx")
+}
+
+model system_folder {
+  id                      Int       @id
+  system_user_id          Int?
+  created_at              DateTime? @db.Date
+  name                    String    @db.VarChar(256)
+  in_trash                String?   @db.Char(1)
+  system_folder_parent_id Int?
+
+  @@index([name], map: "sys_folder_name_idx")
+  @@index([system_folder_parent_id], map: "sys_folder_parend_id_idx")
+  @@index([system_user_id], map: "sys_folder_user_id_idx")
+}
+
+model system_folder_bookmark {
+  id               Int  @id
+  system_user_id   Int?
+  system_folder_id Int?
+
+  @@index([system_folder_id], map: "sys_folder_bookmark_folder_idx")
+  @@index([system_user_id], map: "sys_folder_bookmark_user_idx")
+}
+
+model system_folder_group {
+  id               Int  @id
+  system_folder_id Int?
+  system_group_id  Int?
+
+  @@index([system_folder_id], map: "sys_folder_group_folder_idx")
+  @@index([system_group_id], map: "sys_folder_group_group_idx")
+}
+
+model system_folder_user {
+  id               Int  @id
+  system_folder_id Int?
+  system_user_id   Int?
+
+  @@index([system_folder_id], map: "sys_folder_user_folder_idx")
+  @@index([system_user_id], map: "sys_folder_user_user_idx")
+}
+
+model system_post_like {
+  id             Int      @id
+  system_user_id Int?
+  system_post_id Int
+  created_at     DateTime @default(now()) @db.Timestamp(0)
+
+  @@index([system_post_id], map: "sys_post_like_post_idx")
+  @@index([system_user_id], map: "sys_post_like_user_idx")
+}
+
+model system_post_share_group {
+  id              Int  @id
+  system_group_id Int?
+  system_post_id  Int
+
+  @@index([system_group_id], map: "sys_post_share_group_group_idx")
+  @@index([system_post_id], map: "sys_post_share_group_post_idx")
+}
+
+model system_post_tag {
+  id             Int    @id
+  system_post_id Int
+  tag            String @db.VarChar(256)
+
+  @@index([system_post_id], map: "sys_post_tag_post_idx")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model system_preference {
+  id    String? @db.VarChar(256)
+  value String? @db.Text
+
+  @@index([id], map: "sys_preference_id_idx")
+  @@index([value(length: 768)], map: "sys_preference_value_idx")
+  @@ignore
+}
+
+model system_program_method_role {
+  id                Int            @id
+  system_program_id Int?
+  system_role_id    Int?
+  method_name       String?        @db.VarChar(256)
+  system_program    SystemProgram? @relation(fields: [system_program_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "system_program_method_role_ibfk_1")
+  system_role       SystemRole?    @relation(fields: [system_role_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "system_program_method_role_ibfk_2")
+
+  @@index([system_program_id], map: "sys_program_method_role_program_idx")
+  @@index([system_role_id], map: "sys_program_method_role_role_idx")
+}
+
+model system_user_old_password {
+  id             Int         @id
+  system_user_id Int?
+  password       String?     @db.VarChar(256)
+  created_at     DateTime    @default(now()) @db.Timestamp(0)
+  system_users   SystemUser? @relation(fields: [system_user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "system_user_old_password_ibfk_1")
+
+  @@index([system_user_id], map: "sys_user_old_password_user_idx")
+}
+
+model system_wiki_page {
+  id             Int      @id
+  system_user_id Int?
+  created_at     DateTime @default(now()) @db.Timestamp(0)
+  updated_at     DateTime @default(dbgenerated("'0000-00-00 00:00:00'")) @db.Timestamp(0)
+  title          String   @db.VarChar(256)
+  description    String   @db.VarChar(4096)
+  content        String   @db.Text
+  active         String   @default("Y") @db.Char(1)
+  searchable     String   @default("Y") @db.Char(1)
+
+  @@index([system_user_id], map: "sys_wiki_page_user_idx")
+}
+
+model system_wiki_share_group {
+  id                  Int  @id
+  system_group_id     Int?
+  system_wiki_page_id Int
+
+  @@index([system_group_id], map: "sys_wiki_share_group_group_idx")
+  @@index([system_wiki_page_id], map: "sys_wiki_share_group_page_idx")
+}
+
+model system_wiki_tag {
+  id                  Int    @id
+  system_wiki_page_id Int
+  tag                 String @db.VarChar(256)
+
+  @@index([system_wiki_page_id], map: "sys_wiki_tag_page_idx")
+}

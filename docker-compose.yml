@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: bodycal_mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_DATABASE: u722026046_bodykal
+      MYSQL_USER: bodycal_user
+      MYSQL_PASSWORD: bodycal_pass
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./banco_bodykal.sql:/docker-entrypoint-initdb.d/01_schema.sql:ro
+      - ./init_additional_tables.sql:/docker-entrypoint-initdb.d/02_additional_tables.sql:ro
+    command: >
+      --character-set-server=utf8mb4
+      --collation-server=utf8mb4_unicode_ci
+      --default-authentication-plugin=mysql_native_password
+    networks:
+      - bodycal_network
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: bodycal_phpmyadmin
+    restart: unless-stopped
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      PMA_USER: bodycal_user
+      PMA_PASSWORD: bodycal_pass
+      MYSQL_ROOT_PASSWORD: root123
+    ports:
+      - "8081:80"
+    depends_on:
+      - mysql
+    networks:
+      - bodycal_network
+
+volumes:
+  mysql_data:
+    driver: local
+
+networks:
+  bodycal_network:
+    driver: bridge

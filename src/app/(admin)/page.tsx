@@ -1,41 +1,103 @@
 import type { Metadata } from "next";
-import { EcommerceMetrics } from "@/components/ecommerce/EcommerceMetrics";
 import React from "react";
-import MonthlyTarget from "@/components/ecommerce/MonthlyTarget";
-import MonthlySalesChart from "@/components/ecommerce/MonthlySalesChart";
-import StatisticsChart from "@/components/ecommerce/StatisticsChart";
-import RecentOrders from "@/components/ecommerce/RecentOrders";
-import DemographicCard from "@/components/ecommerce/DemographicCard";
+import { prisma } from "@/lib/prisma";
+import NutritionistMetrics from "@/components/nutrition/NutritionistMetrics";
+import RecentAppointments from "@/components/nutrition/RecentAppointments";
+import PatientEvolutionChart from "@/components/nutrition/PatientEvolutionChart";
+import MonthlyGoals from "@/components/nutrition/MonthlyGoals";
+import WeeklySchedule from "@/components/nutrition/WeeklySchedule";
 
 export const metadata: Metadata = {
-  title:
-    "Next.js E-commerce Dashboard | TailAdmin - Next.js Dashboard Template",
-  description: "This is Next.js Home for TailAdmin Dashboard Template",
+  title: "Dashboard Nutricionista | BodyCal - Sistema de Gestão Nutricional",
+  description: "Dashboard principal para nutricionistas do sistema BodyCal",
 };
 
-export default function Ecommerce() {
+async function getDashboardData() {
+  try {
+    // Buscar dados básicos para o dashboard
+    const totalPatients = await prisma.systemUser.count({
+      where: {
+        functionName: "Paciente",
+        active: "Y"
+      }
+    });
+
+    const totalAppointments = await prisma.appointment.count({
+      where: {
+        status: "agendada"
+      }
+    });
+
+    const recentAppointments = await prisma.appointment.findMany({
+      take: 5,
+      orderBy: {
+        date: 'desc'
+      },
+      include: {
+        patient: {
+          select: {
+            name: true,
+            email: true
+          }
+        }
+      }
+    });
+
+    const activeMealPlans = await prisma.mealPlan.count({
+      where: {
+        active: "Y"
+      }
+    });
+
+    return {
+      totalPatients,
+      totalAppointments,
+      recentAppointments,
+      activeMealPlans
+    };
+  } catch (error) {
+    console.error('Erro ao buscar dados do dashboard:', error);
+    return {
+      totalPatients: 0,
+      totalAppointments: 0,
+      recentAppointments: [],
+      activeMealPlans: 0
+    };
+  }
+}
+
+export default async function NutritionistDashboard() {
+  const dashboardData = await getDashboardData();
+
   return (
     <div className="grid grid-cols-12 gap-4 md:gap-6">
-      <div className="col-span-12 space-y-6 xl:col-span-7">
-        <EcommerceMetrics />
-
-        <MonthlySalesChart />
-      </div>
-
-      <div className="col-span-12 xl:col-span-5">
-        <MonthlyTarget />
-      </div>
-
+      {/* Métricas Principais */}
       <div className="col-span-12">
-        <StatisticsChart />
+        <NutritionistMetrics 
+          totalPatients={dashboardData.totalPatients}
+          totalAppointments={dashboardData.totalAppointments}
+          activeMealPlans={dashboardData.activeMealPlans}
+        />
       </div>
 
-      <div className="col-span-12 xl:col-span-5">
-        <DemographicCard />
+      {/* Gráfico de Evolução dos Pacientes */}
+      <div className="col-span-12 xl:col-span-8">
+        <PatientEvolutionChart />
       </div>
 
+      {/* Metas Mensais */}
+      <div className="col-span-12 xl:col-span-4">
+        <MonthlyGoals />
+      </div>
+
+      {/* Agenda da Semana */}
       <div className="col-span-12 xl:col-span-7">
-        <RecentOrders />
+        <WeeklySchedule />
+      </div>
+
+      {/* Consultas Recentes */}
+      <div className="col-span-12 xl:col-span-5">
+        <RecentAppointments appointments={dashboardData.recentAppointments} />
       </div>
     </div>
   );
