@@ -1,14 +1,18 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import FoodItem from '@/components/meal-plans/FoodItem';
 import MealSection from '@/components/meal-plans/MealSection';
 
 interface Food {
+  id: number;
   name: string;
   calories: number;
+  protein: number;
+  carbs: number;
+  fat: number;
 }
 
 const NewMealPlanTemplateForm = () => {
@@ -18,6 +22,19 @@ const NewMealPlanTemplateForm = () => {
     "Lanche": [],
     "Jantar": [],
   });
+  const [foodLibrary, setFoodLibrary] = useState<Food[]>([]);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [specialInstructions, setSpecialInstructions] = useState('');
+
+  useEffect(() => {
+    const fetchFoods = async () => {
+      const res = await fetch('/api/foods');
+      const data = await res.json();
+      setFoodLibrary(data);
+    };
+
+    fetchFoods();
+  }, []);
 
   const handleDrop = (meal: string, item: Food) => {
     setMeals((prevMeals) => ({
@@ -26,14 +43,17 @@ const NewMealPlanTemplateForm = () => {
     }));
   };
 
-  const foodLibrary: Food[] = [
-    { name: 'Maçã', calories: 95 },
-    { name: 'Banana', calories: 105 },
-    { name: 'Peito de Frango', calories: 165 },
-    { name: 'Arroz Integral', calories: 215 },
-    { name: 'Salada', calories: 50 },
-    { name: 'Iogurte', calories: 150 },
-  ];
+  const calculateTotal = (meal: string, nutrient: keyof Food) => {
+    return meals[meal].reduce((total, food) => total + (food[nutrient] as number), 0);
+  };
+
+  const filteredFoodLibrary = foodLibrary.filter((food) =>
+    food.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const handlePrint = () => {
+    window.print();
+  };
 
   return (
     <DndProvider backend={HTML5Backend}>
@@ -52,7 +72,15 @@ const NewMealPlanTemplateForm = () => {
           {/* Meal Sections */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {Object.keys(meals).map((meal) => (
-              <MealSection key={meal} title={meal} onDrop={(item) => handleDrop(meal, item)}>
+              <MealSection
+                key={meal}
+                title={meal}
+                onDrop={(item) => handleDrop(meal, item)}
+                totalCalories={calculateTotal(meal, 'calories')}
+                totalProtein={calculateTotal(meal, 'protein')}
+                totalCarbs={calculateTotal(meal, 'carbs')}
+                totalFat={calculateTotal(meal, 'fat')}
+              >
                 {meals[meal].length > 0 ? (
                   meals[meal].map((food, index) => (
                     <div key={index} className="flex justify-between items-center bg-white dark:bg-boxdark p-2 rounded-lg mb-2">
@@ -67,18 +95,34 @@ const NewMealPlanTemplateForm = () => {
             ))}
           </div>
 
+          {/* Special Instructions */}
+          <div>
+            <label htmlFor="specialInstructions" className="mb-2.5 block text-black dark:text-white">Instruções Especiais</label>
+            <textarea
+              id="specialInstructions"
+              placeholder="Digite as instruções especiais"
+              className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+              value={specialInstructions}
+              onChange={(e) => setSpecialInstructions(e.target.value)}
+            ></textarea>
+          </div>
+
           {/* Food Items Library */}
           <div className="bg-white dark:bg-boxdark p-5 rounded-lg border border-stroke dark:border-strokedark">
             <h5 className="text-lg font-medium text-black dark:text-white mb-4">Banco de Alimentos</h5>
             {/* Search and filter */}
             <div className="flex items-center gap-4 mb-4">
-              <input type="text" placeholder="Buscar alimento" className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" />
-              <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium">Buscar</button>
+              <input
+                type="text"
+                placeholder="Buscar alimento"
+                className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
             </div>
             {/* Food items list */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {foodLibrary.map((food) => (
-                <FoodItem key={food.name} name={food.name} calories={food.calories} />
+              {filteredFoodLibrary.map((food) => (
+                <FoodItem key={food.id} name={food.name} calories={food.calories} protein={food.protein} carbs={food.carbs} fat={food.fat} />
               ))}
             </div>
           </div>
@@ -86,6 +130,7 @@ const NewMealPlanTemplateForm = () => {
           {/* Actions */}
           <div className="flex justify-end gap-4">
             <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium">Salvar Modelo</button>
+            <button onClick={handlePrint} className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium">Visualizar Impressão</button>
           </div>
         </div>
       </div>

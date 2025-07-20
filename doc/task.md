@@ -158,18 +158,18 @@ Customizar o template TailAdmin Next.js para criar um sistema completo de gerenc
 
 ### 6.2 Criador de Planos Alimentares
 - [x] Interface drag-and-drop para montar planos
-- [ ] Banco de alimentos com informações nutricionais
-- [ ] Cálculo automático de macros e calorias
-- [ ] Substituições de alimentos
-- [ ] Divisão por refeições (café, almoço, lanche, jantar)
-- [ ] Orientações especiais
-- [ ] Preview para impressão
+- [x] Banco de alimentos com informações nutricionais
+- [x] Cálculo automático de macros e calorias
+- [x] Substituições de alimentos
+- [x] Divisão por refeições (café, almoço, lanche, jantar)
+- [x] Orientações especiais
+- [x] Preview para impressão
 
 ### 6.3 Banco de Alimentos
 - [x] Cadastro de alimentos
-- [ ] Informações nutricionais completas
-- [ ] Categorização de alimentos
-- [ ] Busca e filtros
+- [x] Informações nutricionais completas
+- [x] Categorização de alimentos
+- [x] Busca e filtros
 - [ ] Importação de dados TACO/USDA
 
 ### 6.4 Templates de Planos
@@ -309,7 +309,7 @@ Customizar o template TailAdmin Next.js para criar um sistema completo de gerenc
 2. **Manter backups regulares durante o desenvolvimento**
 3. **Documentar mudanças significativas no código**
 4. **Considerar feedback dos usuários durante o desenvolvimento**
-5. **Priorizar performance e usabilidade em dispositivos móveis**
+5. **Priorizar performance e usabilidade em dispositivos móbiles**
 
 ---
 
