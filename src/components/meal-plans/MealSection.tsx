@@ -5,7 +5,7 @@ import { useDrop } from 'react-dnd';
 
 interface MealSectionProps {
   title: string;
-  onDrop: (item: { name: string; calories: number; protein: number; carbs: number; fat: number; }) => void;
+  onDrop: (item: { id: number; name: string; calories: number; protein: number; carbs: number; fat: number; }) => void;
   children: React.ReactNode;
   totalCalories: number;
   totalProtein: number;
@@ -16,7 +16,7 @@ interface MealSectionProps {
 const MealSection: React.FC<MealSectionProps> = ({ title, onDrop, children, totalCalories, totalProtein, totalCarbs, totalFat }) => {
   const [{ isOver }, drop] = useDrop(() => ({
     accept: 'food',
-    drop: (item: { name: string; calories: number; protein: number; carbs: number; fat: number; }) => onDrop(item),
+    drop: (item: { id: number; name: string; calories: number; protein: number; carbs: number; fat: number; }) => onDrop(item),
     collect: (monitor) => ({
       isOver: !!monitor.isOver(),
     }),

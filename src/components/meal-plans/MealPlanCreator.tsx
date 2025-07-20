@@ -122,7 +122,7 @@ const MealPlanCreator = () => {
             {/* Food items list */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {filteredFoodLibrary.map((food) => (
-                <FoodItem key={food.id} name={food.name} calories={food.calories} protein={food.protein} carbs={food.carbs} fat={food.fat} />
+                <FoodItem key={food.id} id={food.id} name={food.name} calories={food.calories} protein={food.protein} carbs={food.carbs} fat={food.fat} />
               ))}
             </div>
           </div>
