@@ -5,8 +5,8 @@ import { prisma } from "@/lib/prisma";
 import PatientsTable from "@/components/patients/PatientsTable";
 
 export const metadata: Metadata = {
-  title: "Pacientes | BodyCal - Sistema de Gestão Nutricional",
-  description: "Gestão de pacientes do sistema BodyCal",
+  title: "Clientes | BodyCal - Sistema de Gestão Nutricional",
+  description: "Gestão de clientes do sistema BodyCal",
 };
 
 async function getPatients() {
@@ -53,7 +53,7 @@ async function getPatients() {
 
     return patientsWithIMC;
   } catch (error) {
-    console.error('Erro ao buscar pacientes:', error);
+    console.error('Erro ao buscar clientes:', error);
     return [];
   }
 }
@@ -66,10 +66,10 @@ export default async function PatientsPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-            Pacientes
+            Clientes
           </h1>
           <p className="text-gray-600 dark:text-gray-400">
-            Gerencie seus pacientes e acompanhe seu progresso
+            Gerencie seus clientes e acompanhe seu progresso
           </p>
         </div>
         <Link
@@ -79,7 +79,7 @@ export default async function PatientsPage() {
           <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
           </svg>
-          Novo Paciente
+          Novo Cliente
         </Link>
       </div>
 

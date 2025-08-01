@@ -3,8 +3,8 @@ import React from "react";
 import PatientCreateForm from "@/components/patients/PatientCreateForm";
 
 export const metadata: Metadata = {
-  title: "Novo Paciente | BodyCal - Sistema de Gestão Nutricional",
-  description: "Cadastrar novo paciente no sistema BodyCal",
+  title: "Novo Cliente | BodyCal - Sistema de Gestão Nutricional",
+  description: "Cadastrar novo cliente no sistema BodyCal",
 };
 
 export default function NewPatientPage() {
@@ -13,10 +13,10 @@ export default function NewPatientPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-            Novo Paciente
+            Novo Cliente
           </h1>
           <p className="text-gray-600 dark:text-gray-400">
-            Cadastre um novo paciente no sistema
+            Cadastre um novo cliente no sistema
           </p>
         </div>
       </div>

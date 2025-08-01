@@ -1,6 +1,6 @@
-# Plano de Adequação da Marca — BodyCall
+# Plano de Adequação da Marca — BodyKall
 
-Este documento detalha o plano de ação para atualizar a identidade visual do sistema BodyCall, com base no guia de branding definido em `doc/branding.md`. O objetivo é realizar uma atualização sutil, mantendo a estética moderna e clean do design atual.
+Este documento detalha o plano de ação para atualizar a identidade visual do sistema BodyKall, com base no guia de branding definido em `doc/branding.md`. O objetivo é realizar uma atualização sutil, mantendo a estética moderna e clean do design atual.
 
 ---
 

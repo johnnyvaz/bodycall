@@ -32,11 +32,19 @@ const navItems: NavItem[] = [
   },
   {
     icon: <UserCircleIcon />,
-    name: "Pacientes",
+    name: "Clientes",
     subItems: [
-      { name: "Lista de Pacientes", path: "/patients", pro: false },
-      { name: "Novo Paciente", path: "/patients/new", pro: false },
-      { name: "Histórico IMC", path: "/patients/imc-history", pro: false },
+      { name: "Lista de Clientes", path: "/patients", pro: false },
+      { name: "Novo Cliente", path: "/patients/new", pro: false },
+    ],
+  },
+  {
+    icon: <PieChartIcon />,
+    name: "Registros IMC",
+    subItems: [
+      { name: "Todos os Registros", path: "/imc", pro: false },
+      { name: "Novo Registro", path: "/imc/new", pro: false },
+      { name: "Relatórios IMC", path: "/imc/reports", pro: false },
     ],
   },
   {

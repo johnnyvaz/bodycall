@@ -1,6 +1,6 @@
-# Guia de Identidade Visual — BodyCall
+# Guia de Identidade Visual — BodyKall
 
-Este documento define os elementos visuais da marca **BodyCall** — um sistema de gestão para nutricionistas — e deve ser usado como referência para personalização de cores, layout e estilo visual no sistema.
+Este documento define os elementos visuais da marca **BodyKall** — um sistema de gestão para nutricionistas — e deve ser usado como referência para personalização de cores, layout e estilo visual no sistema.
 
 ---
 
@@ -38,7 +38,7 @@ Este documento define os elementos visuais da marca **BodyCall** — um sistema 
 
 ## 🔰 Logotipo
 
-- **Nome:** BodyCall
+- **Nome:** BodyKall
 - **Versão com ícone:**  
   - Silhueta humana + símbolo de notificação
 - **Versão reduzida:** Apenas o ícone
