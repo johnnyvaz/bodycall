@@ -155,11 +155,44 @@ const ImcReportsView: React.FC<ImcReportsViewProps> = ({ records, clients }) => 
     hip: 'Quadril (cm)'
   };
 
+  const getEmptyStateMessage = () => {
+    if (selectedClient !== 'all') {
+      const clientName = clients.find(c => c.id === selectedClient)?.name || 'Cliente';
+      if (dateFrom || dateTo) {
+        return `${clientName} não possui registros no período selecionado`;
+      }
+      return `${clientName} ainda não possui registros com estes filtros`;
+    }
+    if (dateFrom || dateTo) {
+      return 'Nenhum registro encontrado neste período';
+    }
+    if (sexFilter !== 'all' || ageRange.min || ageRange.max || categoryFilter !== 'all') {
+      return 'Nenhum registro encontrado com os filtros aplicados';
+    }
+    return 'Nenhum registro encontrado';
+  };
+
   const renderChart = () => {
     if (chartData.length === 0) {
       return (
-        <div className="flex items-center justify-center h-64 text-gray-500 dark:text-gray-400">
-          Nenhum dado encontrado para os filtros selecionados
+        <div className="flex flex-col items-center justify-center h-64 text-gray-500 dark:text-gray-400 space-y-4">
+          <svg className="w-16 h-16 text-gray-300 dark:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+          </svg>
+          <div className="text-center">
+            <p className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+              {getEmptyStateMessage()}
+            </p>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
+              Experimente ajustar os filtros ou selecionar um período diferente
+            </p>
+            <button
+              onClick={clearFilters}
+              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium"
+            >
+              Limpar todos os filtros
+            </button>
+          </div>
         </div>
       );
     }
@@ -319,6 +352,44 @@ const ImcReportsView: React.FC<ImcReportsViewProps> = ({ records, clients }) => 
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
+      {/* Indicador de Filtros Ativos */}
+      {(selectedClient !== 'all' || dateFrom || dateTo || sexFilter !== 'all' || ageRange.min || ageRange.max || categoryFilter !== 'all') && (
+        <div className="p-4 bg-blue-50 dark:bg-blue-900/20 border-b border-blue-200 dark:border-blue-800">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-2">
+              <svg className="w-5 h-5 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.707A1 1 0 013 7V4z" />
+              </svg>
+              <p className="text-sm text-blue-700 dark:text-blue-300">
+                <span className="font-medium">Filtros ativos:</span> Mostrando {filteredRecords.length} de {records.length} registros
+                {selectedClient !== 'all' && (
+                  <span className="ml-2 bg-blue-100 dark:bg-blue-800 px-2 py-1 rounded text-xs">
+                    {clients.find(c => c.id === selectedClient)?.name}
+                  </span>
+                )}
+                {(dateFrom || dateTo) && (
+                  <span className="ml-2 bg-blue-100 dark:bg-blue-800 px-2 py-1 rounded text-xs">
+                    {dateFrom && `A partir de ${new Date(dateFrom).toLocaleDateString('pt-BR')}`}
+                    {dateTo && ` até ${new Date(dateTo).toLocaleDateString('pt-BR')}`}
+                  </span>
+                )}
+                {sexFilter !== 'all' && (
+                  <span className="ml-2 bg-blue-100 dark:bg-blue-800 px-2 py-1 rounded text-xs">
+                    {sexFilter === 'M' ? 'Masculino' : 'Feminino'}
+                  </span>
+                )}
+              </p>
+            </div>
+            <button
+              onClick={clearFilters}
+              className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 text-sm font-medium"
+            >
+              Limpar filtros
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Filtros */}
       <div className="p-6 border-b border-gray-200 dark:border-gray-700">
         <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
@@ -336,12 +407,15 @@ const ImcReportsView: React.FC<ImcReportsViewProps> = ({ records, clients }) => 
               onChange={(e) => setSelectedClient(e.target.value === 'all' ? 'all' : parseInt(e.target.value))}
               className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm"
             >
-              <option value="all">Todos os clientes</option>
-              {clients.map(client => (
-                <option key={client.id} value={client.id}>
-                  {client.name || `Cliente ${client.id}`}
-                </option>
-              ))}
+              <option value="all">Todos os clientes ({records.length} registros)</option>
+              {clients.map(client => {
+                const clientRecordCount = records.filter(record => record.userid === client.id).length;
+                return (
+                  <option key={client.id} value={client.id}>
+                    {client.name || `Cliente ${client.id}`} ({clientRecordCount} registros)
+                  </option>
+                );
+              })}
             </select>
           </div>
 

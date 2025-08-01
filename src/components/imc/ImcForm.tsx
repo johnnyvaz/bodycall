@@ -37,6 +37,8 @@ interface ImcFormProps {
 const ImcForm: React.FC<ImcFormProps> = ({ users, initialData }) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
+  const [calculationProgress, setCalculationProgress] = useState(0);
   const [formData, setFormData] = useState({
     dateimc: initialData?.dateimc || new Date().toISOString().split('T')[0],
     userid: initialData?.userid || '',
@@ -104,6 +106,14 @@ const ImcForm: React.FC<ImcFormProps> = ({ users, initialData }) => {
     return 'Obesidade grau III';
   };
 
+  // Calculate form completion progress
+  useEffect(() => {
+    const requiredFields = ['userid', 'sex', 'weight', 'height'];
+    const filledRequired = requiredFields.filter(field => formData[field as keyof typeof formData]).length;
+    const progress = (filledRequired / requiredFields.length) * 100;
+    setCalculationProgress(progress);
+  }, [formData]);
+
   // Auto-calculate when relevant fields change
   useEffect(() => {
     const weight = parseFloat(formData.weight as string) || 0;
@@ -115,6 +125,13 @@ const ImcForm: React.FC<ImcFormProps> = ({ users, initialData }) => {
     if (weight && height) {
       const bmi = calculateBMI(weight, height);
       const category = getBMICategory(bmi);
+      
+      // Add visual feedback for calculation
+      const calculatedFields = document.querySelectorAll('[data-calculated="true"]');
+      calculatedFields.forEach(field => {
+        field.classList.add('success-glow');
+        setTimeout(() => field.classList.remove('success-glow'), 800);
+      });
       
       setFormData(prev => ({
         ...prev,
@@ -179,7 +196,29 @@ const ImcForm: React.FC<ImcFormProps> = ({ users, initialData }) => {
       });
 
       if (response.ok) {
-        router.push('/imc');
+        // Show success message with celebration
+        setSuccessMessage(initialData?.id ? 'Registro atualizado! 🎉' : 'Registro criado com sucesso! 💪');
+        
+        // Add celebration effect
+        for (let i = 0; i < 20; i++) {
+          setTimeout(() => {
+            const confetti = document.createElement('div');
+            confetti.className = 'confetti-piece';
+            confetti.style.left = Math.random() * 100 + 'vw';
+            confetti.style.backgroundColor = ['#10b981', '#3b82f6', '#f59e0b', '#8b5cf6'][Math.floor(Math.random() * 4)];
+            document.body.appendChild(confetti);
+            
+            setTimeout(() => {
+              if (confetti.parentNode) {
+                confetti.parentNode.removeChild(confetti);
+              }
+            }, 3000);
+          }, i * 50);
+        }
+        
+        setTimeout(() => {
+          router.push('/imc');
+        }, 1500);
       } else {
         console.error('Erro ao salvar registro');
       }
@@ -190,8 +229,51 @@ const ImcForm: React.FC<ImcFormProps> = ({ users, initialData }) => {
     }
   };
 
+  const getProgressEmoji = () => {
+    if (calculationProgress === 0) return '🏁';
+    if (calculationProgress < 50) return '🚀';
+    if (calculationProgress < 100) return '💪';
+    return '🎆';
+  };
+
+  const getProgressMessage = () => {
+    if (calculationProgress === 0) return 'Vamos começar as medidas!';
+    if (calculationProgress < 50) return 'Continuando bem!';
+    if (calculationProgress < 100) return 'Quase pronto para calcular!';
+    return 'Tudo preenchido! Cálculos em tempo real!';
+  };
+
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
+    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 animate-fade-in">
+      {/* Progress Header */}
+      <div className="px-6 py-4 bg-gradient-to-r from-green-50 to-blue-50 dark:from-green-900/20 dark:to-blue-900/20 border-b border-gray-200 dark:border-gray-700">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-3">
+            <span className="text-2xl animate-bounce-gentle">{getProgressEmoji()}</span>
+            <div>
+              <h3 className="text-sm font-medium text-gray-900 dark:text-white">
+                {getProgressMessage()}
+              </h3>
+              <div className="flex items-center mt-1">
+                <div className="w-32 bg-gray-200 dark:bg-gray-700 rounded-full h-2 mr-3">
+                  <div 
+                    className="bg-gradient-to-r from-green-500 to-blue-500 h-2 rounded-full transition-all duration-500 ease-out"
+                    style={{ width: `${calculationProgress}%` }}
+                  ></div>
+                </div>
+                <span className="text-xs text-gray-500 dark:text-gray-400">
+                  {Math.round(calculationProgress)}% completo
+                </span>
+              </div>
+            </div>
+          </div>
+          {successMessage && (
+            <div className="animate-pop-in bg-green-100 text-green-800 px-4 py-2 rounded-full text-sm font-medium">
+              {successMessage}
+            </div>
+          )}
+        </div>
+      </div>
       <div className="p-6">
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Identificação */}
@@ -407,7 +489,8 @@ const ImcForm: React.FC<ImcFormProps> = ({ users, initialData }) => {
                   value={formData.pgbmi}
                   onChange={handleChange}
                   readOnly
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700/50 text-gray-900 dark:text-white"
+                  data-calculated="true"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gradient-to-r from-green-50 to-blue-50 dark:from-green-900/20 dark:to-blue-900/20 text-gray-900 dark:text-white font-semibold"
                 />
               </div>
 
@@ -498,10 +581,31 @@ const ImcForm: React.FC<ImcFormProps> = ({ users, initialData }) => {
             </button>
             <button
               type="submit"
-              disabled={isLoading}
-              className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+              disabled={isLoading || successMessage !== ''}
+              className="group px-6 py-3 text-sm font-medium text-white bg-gradient-to-r from-green-500 to-blue-600 rounded-xl hover:from-green-600 hover:to-blue-700 disabled:from-gray-400 disabled:to-gray-500 transform hover:scale-105 transition-all duration-200 hover:shadow-lg btn-playful"
             >
-              {isLoading ? 'Salvando...' : (initialData?.id ? 'Atualizar' : 'Salvar')}
+              {isLoading ? (
+                <>
+                  <div className="loading-dots mr-2">
+                    <span>.</span>
+                    <span>.</span>
+                    <span>.</span>
+                  </div>
+                  Calculando magia...
+                </>
+              ) : successMessage ? (
+                <>
+                  <span className="mr-2 animate-bounce-gentle">🎉</span>
+                  {initialData?.id ? 'Atualizado!' : 'Criado!'}
+                  <span className="ml-2 animate-bounce-gentle">✨</span>
+                </>
+              ) : (
+                <>
+                  <span className="mr-2 group-hover:animate-wiggle">📈</span>
+                  {initialData?.id ? 'Atualizar Registro' : 'Salvar Registro'}
+                  <span className="ml-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">✨</span>
+                </>
+              )}
             </button>
           </div>
         </form>

@@ -31,6 +31,7 @@ const PatientCreateForm: React.FC = () => {
 
   const [activeTab, setActiveTab] = useState<'personal' | 'measurements'>('personal');
   const [includeInitialMeasurement, setIncludeInitialMeasurement] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -44,6 +45,15 @@ const PatientCreateForm: React.FC = () => {
         ...prev,
         [name]: ''
       }));
+    }
+    
+    // Show success animation when field is filled
+    if (value.trim() && !formData[name as keyof typeof formData]) {
+      const element = document.getElementById(name);
+      if (element) {
+        element.classList.add('success-glow');
+        setTimeout(() => element.classList.remove('success-glow'), 1000);
+      }
     }
   };
 
@@ -156,9 +166,35 @@ const PatientCreateForm: React.FC = () => {
         }
       }
 
-      // Redirect to patient details
-      router.push(`/patients/${patient.id}`);
-      router.refresh();
+      // Show success message with celebration
+      setSuccessMessage('Cliente criado com sucesso! 🎉');
+      
+      // Add confetti effect (visual celebration)
+      const celebrateSuccess = () => {
+        for (let i = 0; i < 30; i++) {
+          setTimeout(() => {
+            const confetti = document.createElement('div');
+            confetti.className = 'confetti-piece';
+            confetti.style.left = Math.random() * 100 + 'vw';
+            confetti.style.backgroundColor = ['#f43f5e', '#3b82f6', '#10b981', '#f59e0b', '#8b5cf6'][Math.floor(Math.random() * 5)];
+            document.body.appendChild(confetti);
+            
+            setTimeout(() => {
+              if (confetti.parentNode) {
+                confetti.parentNode.removeChild(confetti);
+              }
+            }, 3000);
+          }, i * 100);
+        }
+      };
+      
+      celebrateSuccess();
+      
+      // Redirect after showing success
+      setTimeout(() => {
+        router.push(`/patients/${patient.id}`);
+        router.refresh();
+      }, 2000);
     } catch (error) {
       console.error('Erro ao salvar:', error);
       setErrors({ general: error instanceof Error ? error.message : 'Erro ao criar paciente. Tente novamente.' });
@@ -231,10 +267,10 @@ const PatientCreateForm: React.FC = () => {
                     name="name"
                     value={formData.name}
                     onChange={handleInputChange}
-                    className={`w-full px-3 py-2 border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                      errors.name ? 'border-red-300 dark:border-red-600' : 'border-gray-300 dark:border-gray-600'
+                    className={`w-full px-3 py-2 border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent input-focus hover-glow transition-all duration-200 ${
+                      errors.name ? 'border-red-300 dark:border-red-600 animate-shake-no' : 'border-gray-300 dark:border-gray-600'
                     }`}
-                    placeholder="Digite o nome completo"
+                    placeholder="Digite o nome completo 🙋‍♂️"
                   />
                   {errors.name && <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.name}</p>}
                 </div>
@@ -250,10 +286,10 @@ const PatientCreateForm: React.FC = () => {
                     name="email"
                     value={formData.email}
                     onChange={handleInputChange}
-                    className={`w-full px-3 py-2 border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                      errors.email ? 'border-red-300 dark:border-red-600' : 'border-gray-300 dark:border-gray-600'
+                    className={`w-full px-3 py-2 border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent input-focus hover-glow transition-all duration-200 ${
+                      errors.email ? 'border-red-300 dark:border-red-600 animate-shake-no' : 'border-gray-300 dark:border-gray-600'
                     }`}
-                    placeholder="Digite o email"
+                    placeholder="Digite o email 📧"
                   />
                   {errors.email && <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.email}</p>}
                 </div>
@@ -502,19 +538,30 @@ const PatientCreateForm: React.FC = () => {
           
           <button
             type="submit"
-            disabled={isLoading}
-            className="bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white px-6 py-2 rounded-lg font-medium inline-flex items-center"
+            disabled={isLoading || successMessage !== ''}
+            className="group bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 disabled:from-gray-400 disabled:to-gray-500 text-white px-8 py-3 rounded-xl font-medium inline-flex items-center transform hover:scale-105 transition-all duration-200 hover:shadow-lg btn-playful"
           >
             {isLoading ? (
               <>
-                <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-                Criando...
+                <div className="loading-dots mr-2">
+                  <span>.</span>
+                  <span>.</span>
+                  <span>.</span>
+                </div>
+                Criando sua magia...
+              </>
+            ) : successMessage ? (
+              <>
+                <span className="mr-2 animate-bounce-gentle">🎉</span>
+                Cliente Criado!
+                <span className="ml-2 animate-bounce-gentle">✨</span>
               </>
             ) : (
-              'Criar Paciente'
+              <>
+                <span className="mr-2 group-hover:animate-wiggle">🚀</span>
+                Criar Cliente
+                <span className="ml-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">✨</span>
+              </>
             )}
           </button>
         </div>

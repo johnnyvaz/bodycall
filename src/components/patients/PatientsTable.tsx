@@ -1,6 +1,7 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import '../../styles/whimsy.css';
 
 interface PatientData {
   id: number;
@@ -30,6 +31,25 @@ interface PatientsTableProps {
 const PatientsTable: React.FC<PatientsTableProps> = ({ patients }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
+  const [isLoading, setIsLoading] = useState(true);
+  const [celebratingRows, setCelebratingRows] = useState<Set<number>>(new Set());
+
+  // Simular loading para mostrar skeleton
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoading(false), 800);
+    return () => clearTimeout(timer);
+  }, []);
+
+  const handleCelebrate = (patientId: number) => {
+    setCelebratingRows(prev => new Set(prev).add(patientId));
+    setTimeout(() => {
+      setCelebratingRows(prev => {
+        const newSet = new Set(prev);
+        newSet.delete(patientId);
+        return newSet;
+      });
+    }, 600);
+  };
 
   const filteredPatients = patients.filter(patient => {
     const matchesSearch = patient.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -74,8 +94,34 @@ const PatientsTable: React.FC<PatientsTableProps> = ({ patients }) => {
     }).format(date);
   };
 
+  if (isLoading) {
+    return (
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 animate-fade-in">
+        <div className="p-6 border-b border-gray-200 dark:border-gray-700">
+          <div className="flex items-center justify-between">
+            <div className="skeleton h-10 w-64 rounded-lg"></div>
+            <div className="skeleton h-10 w-32 rounded-lg"></div>
+          </div>
+        </div>
+        <div className="p-6">
+          {[...Array(5)].map((_, i) => (
+            <div key={i} className="flex items-center space-x-4 mb-4">
+              <div className="skeleton h-10 w-10 rounded-full"></div>
+              <div className="flex-1">
+                <div className="skeleton h-4 w-48 mb-2 rounded"></div>
+                <div className="skeleton h-3 w-32 rounded"></div>
+              </div>
+              <div className="skeleton h-4 w-16 rounded"></div>
+              <div className="skeleton h-4 w-20 rounded"></div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
+    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 animate-fade-in card-hover">
       {/* Header with search and filters */}
       <div className="p-6 border-b border-gray-200 dark:border-gray-700">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0">
@@ -86,10 +132,10 @@ const PatientsTable: React.FC<PatientsTableProps> = ({ patients }) => {
               </svg>
               <input
                 type="text"
-                placeholder="Buscar por nome ou email..."
+                placeholder="Buscar por nome ou email... 🔍"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent input-focus hover-glow"
               />
             </div>
           </div>
@@ -105,8 +151,11 @@ const PatientsTable: React.FC<PatientsTableProps> = ({ patients }) => {
               <option value="inactive">Inativos</option>
             </select>
             
-            <div className="text-sm text-gray-600 dark:text-gray-400">
-              {filteredPatients.length} de {patients.length} clientes
+            <div className="text-sm text-gray-600 dark:text-gray-400 animate-fade-in-delay">
+              📈 {filteredPatients.length} de {patients.length} clientes
+              {filteredPatients.length > 0 && (
+                <span className="ml-2 animate-bounce-gentle">✨</span>
+              )}
             </div>
           </div>
         </div>
@@ -143,14 +192,41 @@ const PatientsTable: React.FC<PatientsTableProps> = ({ patients }) => {
           <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
             {filteredPatients.length === 0 ? (
               <tr>
-                <td colSpan={7} className="px-6 py-12 text-center">
-                  <div className="flex flex-col items-center">
-                    <svg className="w-12 h-12 text-gray-400 dark:text-gray-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                    </svg>
-                    <p className="text-gray-500 dark:text-gray-400">
-                      {searchTerm ? 'Nenhum cliente encontrado' : 'Nenhum cliente cadastrado'}
+                <td colSpan={7} className="px-6 py-16 text-center">
+                  <div className="flex flex-col items-center animate-pop-in">
+                    <div className="animate-float mb-6">
+                      <div className="relative">
+                        <div className="w-20 h-20 bg-gradient-to-r from-blue-100 to-purple-100 dark:from-blue-900/30 dark:to-purple-900/30 rounded-full flex items-center justify-center mb-4">
+                          <span className="text-4xl animate-bounce-gentle" role="img" aria-label="procurando">
+                            {searchTerm ? '🔍' : '👥'}
+                          </span>
+                        </div>
+                        {!searchTerm && (
+                          <div className="absolute -top-2 -right-2 animate-pulse-subtle">
+                            <span className="text-2xl" role="img" aria-label="brilho">✨</span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                    <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+                      {searchTerm ? 'Ops! Ninguém por aqui' : 'Sua jornada começa aqui!'}
+                    </h3>
+                    <p className="text-gray-500 dark:text-gray-400 max-w-sm">
+                      {searchTerm 
+                        ? 'Que tal tentar outros termos de busca? Seus clientes estão esperando!' 
+                        : 'Adicione seu primeiro cliente e comece a acompanhar transformações incríveis!'
+                      }
                     </p>
+                    {!searchTerm && (
+                      <Link
+                        href="/patients/new"
+                        className="mt-6 inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl font-medium hover:from-blue-600 hover:to-blue-700 transform hover:scale-105 transition-all duration-200 hover:shadow-lg btn-playful"
+                      >
+                        <span className="mr-2">🎆</span>
+                        Adicionar Primeiro Cliente
+                        <span className="ml-2 animate-bounce-gentle">✨</span>
+                      </Link>
+                    )}
                   </div>
                 </td>
               </tr>
@@ -161,15 +237,19 @@ const PatientsTable: React.FC<PatientsTableProps> = ({ patients }) => {
                 const nextAppointment = patient.patientAppointments[0];
 
                 return (
-                  <tr key={patient.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                  <tr key={patient.id} className={`hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-all duration-200 hover-lift ${
+                    celebratingRows.has(patient.id) ? 'animate-celebrate' : ''
+                  }`}>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
                       #{patient.id}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
                         <div className="flex-shrink-0 h-10 w-10">
-                          <div className="h-10 w-10 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
-                            <span className="text-blue-600 dark:text-blue-400 font-medium text-sm">
+                          <div className="h-10 w-10 rounded-full bg-gradient-to-r from-blue-400 to-purple-500 flex items-center justify-center transform hover:scale-110 transition-transform duration-200 cursor-pointer"
+                               onClick={() => handleCelebrate(patient.id)}
+                               title="Clique para celebrar este cliente! 🎉">
+                            <span className="text-white font-bold text-sm">
                               {patient.name?.charAt(0).toUpperCase() || 'P'}
                             </span>
                           </div>
@@ -207,17 +287,25 @@ const PatientsTable: React.FC<PatientsTableProps> = ({ patients }) => {
                       <div className="flex items-center justify-end space-x-2">
                         <Link
                           href={`/patients/${patient.id}`}
-                          className="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
+                          className="inline-flex items-center px-3 py-1 text-sm bg-blue-100 text-blue-700 rounded-full hover:bg-blue-200 dark:bg-blue-900/30 dark:text-blue-400 dark:hover:bg-blue-900/50 transition-all duration-200 hover:scale-105"
+                          title="Ver detalhes do cliente"
                         >
+                          <span className="mr-1">👁️</span>
                           Ver
                         </Link>
                         <Link
                           href={`/patients/${patient.id}/edit`}
-                          className="text-gray-600 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
+                          className="inline-flex items-center px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded-full hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600 transition-all duration-200 hover:scale-105"
+                          title="Editar informações"
                         >
+                          <span className="mr-1">✏️</span>
                           Editar
                         </Link>
-                        <button className="text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300">
+                        <button 
+                          className="inline-flex items-center px-3 py-1 text-sm bg-red-100 text-red-700 rounded-full hover:bg-red-200 dark:bg-red-900/30 dark:text-red-400 dark:hover:bg-red-900/50 transition-all duration-200 hover:scale-105"
+                          title="Remover cliente (cuidado!)"
+                        >
+                          <span className="mr-1">🗑️</span>
                           Excluir
                         </button>
                       </div>

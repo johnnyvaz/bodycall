@@ -37,12 +37,19 @@ export default async function NewImcPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-          Novo Registro IMC
-        </h1>
-        <p className="text-gray-600 dark:text-gray-400">
-          Cadastre um novo registro de composição corporal e IMC
+      <div className="space-y-2 animate-fade-in">
+        <div className="flex items-center space-x-3">
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white animate-slide-up">
+            Novo Registro IMC
+          </h1>
+          <div className="animate-bounce-gentle">
+            <span className="text-2xl" role="img" aria-label="medindo">
+              📉
+            </span>
+          </div>
+        </div>
+        <p className="text-gray-600 dark:text-gray-400 animate-slide-up-delay">
+          💪 Vamos capturar mais um momento da jornada de transformação! Cada medida conta uma história de progresso.
         </p>
       </div>
 
