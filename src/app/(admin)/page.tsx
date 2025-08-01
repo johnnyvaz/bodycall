@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import React from "react";
+import "@/styles/whimsy.css";
 import { prisma } from "@/lib/prisma";
 import NutritionistMetrics from "@/components/nutrition/NutritionistMetrics";
 import RecentAppointments from "@/components/nutrition/RecentAppointments";
@@ -72,31 +73,33 @@ export default async function NutritionistDashboard() {
   return (
     <div className="grid grid-cols-12 gap-4 md:gap-6">
       {/* Métricas Principais */}
-      <div className="col-span-12">
-        <NutritionistMetrics 
+      <div className="col-span-12 animate-fadeInUp card-interactive">
+        <NutritionistMetrics
           totalPatients={dashboardData.totalPatients}
           totalAppointments={dashboardData.totalAppointments}
           activeMealPlans={dashboardData.activeMealPlans}
+          loading={false}
+          celebrate={true}
         />
       </div>
 
       {/* Gráfico de Evolução dos Pacientes */}
-      <div className="col-span-12 xl:col-span-8">
+      <div className="col-span-12 xl:col-span-8 animate-fadeInUp delay-100 card-interactive">
         <PatientEvolutionChart />
       </div>
 
       {/* Metas Mensais */}
-      <div className="col-span-12 xl:col-span-4">
+      <div className="col-span-12 xl:col-span-4 animate-fadeInUp delay-200 card-interactive">
         <MonthlyGoals />
       </div>
 
       {/* Agenda da Semana */}
-      <div className="col-span-12 xl:col-span-7">
+      <div className="col-span-12 xl:col-span-7 animate-fadeInUp delay-300 card-interactive">
         <WeeklySchedule />
       </div>
 
       {/* Consultas Recentes */}
-      <div className="col-span-12 xl:col-span-5">
+      <div className="col-span-12 xl:col-span-5 animate-fadeInUp delay-300 card-interactive">
         <RecentAppointments appointments={dashboardData.recentAppointments} />
       </div>
     </div>

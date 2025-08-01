@@ -1,17 +1,31 @@
 'use client';
 import React from 'react';
+import '@/styles/whimsy.css';
+import { useEffect, useState } from 'react';
 
 interface NutritionistMetricsProps {
   totalPatients: number;
   totalAppointments: number;
   activeMealPlans: number;
+  celebrate?: boolean;
+  loading?: boolean;
 }
 
 const NutritionistMetrics: React.FC<NutritionistMetricsProps> = ({
   totalPatients,
   totalAppointments,
-  activeMealPlans
+  activeMealPlans,
+  celebrate = false,
+  loading = false
 }) => {
+  const [celebrateState, setCelebrateState] = useState(false);
+  useEffect(() => {
+    if (celebrate) {
+      setCelebrateState(true);
+      const timeout = setTimeout(() => setCelebrateState(false), 800);
+      return () => clearTimeout(timeout);
+    }
+  }, [celebrate]);
   const metrics = [
     {
       title: "Total de Pacientes",
@@ -94,6 +108,23 @@ const NutritionistMetrics: React.FC<NutritionistMetricsProps> = ({
     return colors[color as keyof typeof colors];
   };
 
+  if (loading) {
+    return (
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {[1, 2, 3, 4].map((k) => (
+          <div
+            key={k}
+            className="h-32 bg-gray-100 dark:bg-gray-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700 animate-shimmer"
+          >
+            <div className="w-16 h-6 rounded-lg bg-gray-200 dark:bg-gray-600 mb-2 animate-pulse-gentle"></div>
+            <div className="w-24 h-7 rounded bg-gray-300 dark:bg-gray-700 mb-1 animate-pulse-gentle"></div>
+            <div className="w-16 h-3 rounded bg-gray-200 dark:bg-gray-600 animate-pulse-gentle"></div>
+          </div>
+        ))}
+      </div>
+    );
+  }
+
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       {metrics.map((metric, index) => {
@@ -102,7 +133,11 @@ const NutritionistMetrics: React.FC<NutritionistMetricsProps> = ({
         return (
           <div
             key={index}
-            className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm border border-gray-200 dark:border-gray-700"
+            className={
+              `bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm border border-gray-200 dark:border-gray-700 card-interactive hover-lift animate-fadeInUp ` +
+              (celebrateState ? ' celebrate' : '')
+            }
+            style={{ animationDelay: `${index * 0.08}s` }}
           >
             <div className="flex items-center justify-between mb-4">
               <div className={`p-2 rounded-lg ${colorClasses.bg}`}>
@@ -120,7 +155,7 @@ const NutritionistMetrics: React.FC<NutritionistMetricsProps> = ({
                 {metric.title}
               </h3>
               <div className="flex items-baseline space-x-1">
-                <span className="text-2xl font-bold text-gray-900 dark:text-white">
+                <span className="text-2xl font-bold text-gray-900 dark:text-white hover-glow transition-transform duration-150">
                   {metric.value.toLocaleString()}
                 </span>
                 {metric.suffix && (
